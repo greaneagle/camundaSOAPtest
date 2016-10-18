@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.1.1">
+  <bpmn:process id="approve-soap" name="SOAP Approval" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_147hypf</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_147hypf" sourceRef="StartEvent_1" targetRef="UserTask_0i2o6xc" />
+    <bpmn:sequenceFlow id="SequenceFlow_1oikh7o" sourceRef="UserTask_0i2o6xc" targetRef="ServiceTask_1m5d9av" />
+    <bpmn:endEvent id="EndEvent_04l6209">
+      <bpmn:incoming>SequenceFlow_1w83ew8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0arv6nf" sourceRef="ServiceTask_1m5d9av" targetRef="UserTask_01x3zj0" />
+    <bpmn:sequenceFlow id="SequenceFlow_1w83ew8" sourceRef="UserTask_01x3zj0" targetRef="EndEvent_04l6209" />
+    <bpmn:userTask id="UserTask_01x3zj0" name="Output temp" camunda:formKey="embedded:app:forms/approve-soap.html">
+      <bpmn:incoming>SequenceFlow_0arv6nf</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1w83ew8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="UserTask_0i2o6xc" name="Input temp" camunda:formKey="embedded:app:forms/request-soap.html">
+      <bpmn:incoming>SequenceFlow_147hypf</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1oikh7o</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="ServiceTask_1m5d9av" name="SOAP get temp">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://webservices.daehosting.com/services/TemperatureConversions.wso</camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="freemarker"><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://webservices.daehosting.com/temperature">
+   <soap:Header/>
+   <soap:Body>
+      <tem:CelsiusToFahrenheit>
+         <tem:nCelsius>${incelsius}</tem:nCelsius>
+      </tem:CelsiusToFahrenheit>
+   </soap:Body>
+</soap:Envelope>]]></camunda:script>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="header">
+              <camunda:map>
+                <camunda:entry key="Content-Type"><![CDATA[application/soap+xml;charset=UTF-8;action="http://webservices.daehosting.com/temperature"]]></camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:outputParameter name="soapResponse" />
+          </camunda:inputOutput>
+          <camunda:connectorId>soap-http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1oikh7o</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0arv6nf</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="approve-soap">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="321" y="310" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="294" y="346" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_147hypf_di" bpmnElement="SequenceFlow_147hypf">
+        <di:waypoint xsi:type="dc:Point" x="357" y="328" />
+        <di:waypoint xsi:type="dc:Point" x="492" y="328" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="379.5" y="303" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1oikh7o_di" bpmnElement="SequenceFlow_1oikh7o">
+        <di:waypoint xsi:type="dc:Point" x="592" y="328" />
+        <di:waypoint xsi:type="dc:Point" x="708" y="328" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="605" y="303" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_04l6209_di" bpmnElement="EndEvent_04l6209">
+        <dc:Bounds x="1130.7879719051798" y="310" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1103.7879719051798" y="346" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0arv6nf_di" bpmnElement="SequenceFlow_0arv6nf">
+        <di:waypoint xsi:type="dc:Point" x="808" y="328" />
+        <di:waypoint xsi:type="dc:Point" x="943" y="328" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="830.5" y="303" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1w83ew8_di" bpmnElement="SequenceFlow_1w83ew8">
+        <di:waypoint xsi:type="dc:Point" x="1043" y="328" />
+        <di:waypoint xsi:type="dc:Point" x="1131" y="328" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1042" y="303" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_01x3zj0_di" bpmnElement="UserTask_01x3zj0">
+        <dc:Bounds x="943" y="288" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0i2o6xc_di" bpmnElement="UserTask_0i2o6xc">
+        <dc:Bounds x="492" y="288" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1m5d9av_di" bpmnElement="ServiceTask_1m5d9av">
+        <dc:Bounds x="708" y="288" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
