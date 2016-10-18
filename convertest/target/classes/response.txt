@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-16"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+   <soap:Body>
+      <m:CelsiusToFahrenheitResponse xmlns:m="http://webservices.daehosting.com/temperature">
+         <m:CelsiusToFahrenheitResult>68</m:CelsiusToFahrenheitResult>
+      </m:CelsiusToFahrenheitResponse>
+   </soap:Body>
+</soap:Envelope>
